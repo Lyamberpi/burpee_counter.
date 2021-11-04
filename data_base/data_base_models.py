@@ -1,9 +1,11 @@
+from os import environ
+
 import mysql.connector
 
 
 class AbstractDataBase:
-    connection = mysql.connector.connect(host="remotemysql.com", port=3306, user="SQ5FWtqzAU", password="CQ2H23uitY",
-                                         database="SQ5FWtqzAU")
+    connection = mysql.connector.connect(host=environ["DB_HOST"], port=environ["DB_PORT"], user=environ["DB_USER"],
+                                         password=environ["DB_PASS"], database=environ["DB_NAME"])
 
 
 class UserDB(AbstractDataBase):
