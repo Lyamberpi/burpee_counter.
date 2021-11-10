@@ -4,12 +4,13 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 import states
 from handlers.client_util_handlers import convert_km_to_m
-from transaction import RecordTransactions, UserTransactions
+from transaction import RecordTransactions, UserTransactions, ChatTransactions
 
 
 class AdminHandlers:
     record_transactions = RecordTransactions()
     user_transactions = UserTransactions()
+    chat_transactions = ChatTransactions()
 
     async def set_zero_run_handler(self, message: types.Message):
         if message.from_user.id == message.chat.id:
@@ -91,7 +92,20 @@ class AdminHandlers:
             "/add_team_result берпи/бёрпи/burpee - добавить запись бёрпи от имени администратора (Пользователь - "
             "Булава и команда)\n"
             "/add_team_result бег/run - добавить запись бега от имени администратора (Пользователь - "
-            "Булава и команда)\n")
+            "Булава и команда)\n"
+            "/add_chat chat_id название_чата пол - Добавить чат(1=Муж, 2=Жен)")
+
+    async def add_chat_handler(self, message: types.Message):
+        if message.from_user.id == message.chat.id:
+            args = message.get_args().split()
+            chat_id = args[0]
+            title = args[1]
+            if chat_id:
+                if len(args) > 2:
+                    self.chat_transactions.add_chat(chat_id, title, args[2])
+                else:
+                    self.chat_transactions.add_chat(chat_id, title)
+            await message.answer("Чат добавлен успешно!")
 
     async def __edit_processing(self, message, record_id, user_message):
         if len(user_message) > 1:
