@@ -15,6 +15,11 @@ class ExerciseHandler:
         user = User(from_user.first_name, from_user.last_name, from_user.id)
         contribution = message.text.split(" ", 2)[1]
         common_user_result, contribution_in_km, name_link = await self.__add_run_result(message, user, contribution)
+        gender: tuple = self.user_transactions.get_user_gender(from_user.id)
+        if gender[0] == 2:
+            contribution_in_km = " пробежала " + str(contribution_in_km)
+        else:
+            contribution_in_km = " пробежал " + str(contribution_in_km)
         await message.answer(
             name_link + " пробежал " + contribution_in_km + "/" + str(common_user_result) + " км!",
             parse_mode="Markdown")
@@ -24,9 +29,13 @@ class ExerciseHandler:
         user = User(from_user.first_name, from_user.last_name, from_user.id)
         contribution = int(message.text.split(" ", 2)[1])
         common_user_result, contribution, name_link = await self.__add_burpee_result(message, user, contribution)
-        await message.delete()
+        gender: tuple = self.user_transactions.get_user_gender(from_user.id)
+        if gender[0] == 2:
+            contribution = " сделала " + str(contribution)
+        else:
+            contribution = " сделал " + str(contribution)
         await message.answer(
-            name_link + " сделал " + str(contribution) + "/" + str(common_user_result) + " бёрпи!",
+            name_link + contribution + "/" + str(common_user_result) + " бёрпи!",
             parse_mode="Markdown")
 
     async def add_team_result_handler(self, message: types.Message):
@@ -58,14 +67,13 @@ class ExerciseHandler:
         self.__handle_new_record(message, contribution, 1)
         name_link = self.__prepare_name_link(message)
         common_user_result = self.record_transactions.get_common_user_result(message.from_user.id, 1)
+        await message.delete()
         return common_user_result, contribution, name_link
 
     def __handle_new_record(self, message, contribution, exercise_type):
         user_id = message.from_user.id
         chat_id = message.chat.id
-        if chat_id != user_id:
-            self.chat_transactions.add_chat(chat_id, message.chat.title)
-        else:
+        if chat_id == user_id:
             chat_id = None
         self.record_transactions.create_record(contribution, exercise_type, user_id, chat_id)
 

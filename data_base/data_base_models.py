@@ -1,11 +1,10 @@
-from os import environ
-
 import mysql.connector
 
 
 class AbstractDataBase:
-    connection = mysql.connector.connect(host=environ["DB_HOST"], port=environ["DB_PORT"], user=environ["DB_USER"],
-                                         password=environ["DB_PASS"], database=environ["DB_NAME"])
+    connection = mysql.connector.connect(host="database-test.cwcm4dxhnyoi.us-east-2.rds.amazonaws.com", port="3306",
+                                         user="admin",
+                                         password="nick12nick", database="burpee_bot")
 
 
 class UserDB(AbstractDataBase):
@@ -79,17 +78,19 @@ class UserDB(AbstractDataBase):
 
 
 class ChatDB(AbstractDataBase):
-    def add_chat(self, chat_id, title):
-        sql = "INSERT INTO chats(chat_id, title)\
-              SELECT * FROM (SELECT %s id, %s) AS tmp\
-              WHERE NOT EXISTS(SELECT chat_id FROM chats WHERE chat_id = tmp.id);"
+    def add_chat(self, chat_id, title, gender):
+        sql1 = "INSERT INTO chats(chat_id, title, gender) VALUES (%s, %s, %s)"
+        sql2 = "UPDATE burpee_bot.chats SET title=%s, gender=%s  WHERE chat_id =%s;"
         self.connection.reconnect(attempts=2)
         with self.connection.cursor() as cursor:
-            cursor.execute(sql, (chat_id, title))
+            try:
+                cursor.execute(sql1, (chat_id, title, gender))
+            except mysql.connector.errors.IntegrityError:
+                cursor.execute(sql2, (title, gender, chat_id))
             self.connection.commit()
 
-    def get_all_chat_id(self) -> list:
-        sql = "SELECT chat_id FROM chats"
+    def get_all_chats(self) -> list:
+        sql = "SELECT * FROM chats"
         self.connection.reconnect(attempts=2)
         with self.connection.cursor() as cursor:
             cursor.execute(sql)
@@ -206,3 +207,15 @@ class RecordDB(AbstractDataBase):
         with self.connection.cursor() as cursor:
             cursor.execute(sql, (new_value,))
             self.connection.commit()
+
+    def get_records_by_date(self, exercise_type_id, gender, date_from, date_to):
+        sql = "SELECT r.user_id as id, u.first_name as fn," \
+              "u.second_name as sn,SUM(contribution) AS c " \
+              "FROM records r, users u WHERE exercise_type_id = %s " \
+              "AND r.user_id = u.user_id AND u.gender = %s " \
+              "AND r.date BETWEEN %s and %s " \
+              "GROUP BY id ORDER BY c DESC"
+        self.connection.reconnect(attempts=2)
+        with self.connection.cursor() as cursor:
+            cursor.execute(sql, (exercise_type_id, gender, date_from, date_to))
+            return cursor.fetchall()

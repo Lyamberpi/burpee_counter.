@@ -18,10 +18,10 @@ class UserTransactions:
     def add_age(self, user_id, age: int):
         self.users.add_age(user_id, age)
 
-    def get_user_age(self, user_id) -> int:
+    def get_user_age(self, user_id) -> tuple:
         return self.users.get_age(user_id)
 
-    def get_user_gender(self, user_id) -> int:
+    def get_user_gender(self, user_id) -> tuple:
         return self.users.get_gender(user_id)
 
     def ban_user(self, user_id):
@@ -34,11 +34,11 @@ class UserTransactions:
 class ChatTransactions:
     chats = ChatDB()
 
-    def add_chat(self, chat_id, title):
-        self.chats.add_chat(chat_id, title)
+    def add_chat(self, chat_id, title, gender=1):
+        self.chats.add_chat(chat_id, title, gender)
 
-    def get_all_chat_id(self):
-        return self.chats.get_all_chat_id()
+    def get_all_chats(self):
+        return self.chats.get_all_chats()
 
 
 class TransactionUtils:
@@ -145,3 +145,22 @@ class RecordTransactions:
 
     def set_autoincrement(self, new_value):
         self.records.set_autoincrement(new_value)
+
+    def get_records_by_date(self, exercise_type_id, gender, date_from, date_to):
+        records_list = self.records.get_records_by_date(exercise_type_id, gender, date_from, date_to)
+        formatted_result = ""
+        counter = 1
+        for tuple_line in records_list:
+            user_id = tuple_line[0]
+            contribution = self.utils.prepare_result(tuple_line[3], exercise_type_id)
+            if exercise_type_id == 2:
+                contribution = str(contribution) + " км."
+            if tuple_line[2]:
+                name = tuple_line[1] + " " + tuple_line[2]
+            else:
+                name = tuple_line[1]
+            name = '<a href="tg://user?id=' + str(user_id) + '">' + name + '</a>'
+            formatted_result = formatted_result + str(counter) + ". " + name + " " + str(contribution) + "\n"
+            counter += 1
+        return formatted_result
+
