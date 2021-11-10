@@ -19,8 +19,8 @@ class UserDB(AbstractDataBase):
                 return True
 
     def add_user(self, first_name, second_name, user_id):
-        sql = "INSERT INTO users(first_name, second_name, user_id)\
-              SELECT * FROM (SELECT %s f_name, %s s_name, %s u_id) AS tmp\
+        sql = "INSERT INTO users(first_name, second_name, user_id, registr_date)\
+              SELECT * FROM (SELECT %s f_name, %s s_name, %s u_id, current_date()) AS tmp\
               WHERE NOT EXISTS(SELECT user_id FROM users WHERE user_id = tmp.u_id);"
         self.connection.reconnect(attempts=2)
         with self.connection.cursor() as cursor:
