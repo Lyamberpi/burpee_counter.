@@ -21,7 +21,7 @@ class ExerciseHandler:
         else:
             contribution_in_km = " пробежал " + str(contribution_in_km)
         await message.answer(
-            name_link + " пробежал " + contribution_in_km + "/" + str(common_user_result) + " км!",
+            name_link + contribution_in_km + "/" + str(common_user_result) + " км!",
             parse_mode="Markdown")
 
     async def add_burpee_handler(self, message: types.Message):
