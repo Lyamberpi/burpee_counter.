@@ -42,19 +42,21 @@ class AdminHandlers:
         await callback.message.answer(str(deleted_rows) + " записей удалено успешно!")
 
     async def ban_user(self, message: types.Message):
-        id_to_ban = int(message.get_args())
-        if id_to_ban != message.from_user.id:
-            self.user_transactions.ban_user(id_to_ban)
-            await message.delete()
-            await message.answer("[Пользователь](tg://user?id=" + str(id_to_ban) + ") забанен", parse_mode="Markdown")
+        if message.from_user.id == message.chat.id:
+            id_to_ban = int(message.get_args())
+            if id_to_ban != message.from_user.id:
+                self.user_transactions.ban_user(id_to_ban)
+                await message.delete()
+                await message.answer("[Пользователь](tg://user?id=" + str(id_to_ban) + ") забанен", parse_mode="Markdown")
 
     async def unban_user(self, message: types.Message):
-        id_to_unban = int(message.get_args())
-        if id_to_unban != message.from_user.id:
-            self.user_transactions.unban_user(id_to_unban)
-            await message.delete()
-            await message.answer("[Пользователь](tg://user?id=" + str(id_to_unban) + ") разбанен",
-                                 parse_mode="Markdown")
+        if message.from_user.id == message.chat.id:
+            id_to_unban = int(message.get_args())
+            if id_to_unban != message.from_user.id:
+                self.user_transactions.unban_user(id_to_unban)
+                await message.delete()
+                await message.answer("[Пользователь](tg://user?id=" + str(id_to_unban) + ") разбанен",
+                                     parse_mode="Markdown")
 
     async def show_records_handler(self, message: types.Message):
         if message.from_user.id == message.chat.id:
@@ -84,19 +86,20 @@ class AdminHandlers:
         await message.answer("Вы вышли из режима редактирования")
 
     async def help_admin_handler(self, message: types.Message):
-        await message.answer(
-            "/set_zero_run - обнулить счетчик бега\n"
-            "/set_zero_burpee - обнулить счетчик бёрпи\n"
-            "/ban user_id - забанить пользователя по его id\n"
-            "/unban user_id - разбанить пользователя по его id\n"
-            "/show_records user_id максимальное_количество_записей - показать записи пользователя по его id\n"
-            "/show_records all максимальное_количество_записей - показать записи всех пользователей\n"
-            "/add_team_result берпи/бёрпи/burpee - добавить запись бёрпи от имени администратора (Пользователь - "
-            "Булава и команда)\n"
-            "/add_team_result бег/run - добавить запись бега от имени администратора (Пользователь - "
-            "Булава и команда)\n"
-            "/add_chat chat_id название_чата пол - Добавить чат(1=Муж, 2=Жен)"
-            "/get_xls Получить выгрузку данных о пользователях в формате .xls")
+        if message.from_user.id == message.chat.id:
+            await message.answer(
+                "/set_zero_run - обнулить счетчик бега\n"
+                "/set_zero_burpee - обнулить счетчик бёрпи\n"
+                "/ban user_id - забанить пользователя по его id\n"
+                "/unban user_id - разбанить пользователя по его id\n"
+                "/show_records user_id максимальное_количество_записей - показать записи пользователя по его id\n"
+                "/show_records all максимальное_количество_записей - показать записи всех пользователей\n"
+                "/add_team_result берпи/бёрпи/burpee - добавить запись бёрпи от имени администратора (Пользователь - "
+                "Булава и команда)\n"
+                "/add_team_result бег/run - добавить запись бега от имени администратора (Пользователь - "
+                "Булава и команда)\n"
+                "/add_chat chat_id название_чата пол - Добавить чат(1=Муж, 2=Жен)\n"
+                "/get_xls Получить выгрузку данных о пользователях в формате .xls")
 
     async def add_chat_handler(self, message: types.Message):
         if message.from_user.id == message.chat.id:
@@ -111,10 +114,11 @@ class AdminHandlers:
             await message.answer("Чат добавлен успешно!")
 
     async def get_xls_handler(self, message: types.Message):
-        users_data = self.user_transactions.get_users_info()
-        self.xls_creator.unload_user_data(users_data)
-        file = InputFile("users_data.xlsx")
-        await message.answer_document(file)
+        if message.from_user.id == message.chat.id:
+            users_data = self.user_transactions.get_users_info()
+            self.xls_creator.unload_user_data(users_data)
+            file = InputFile("users_data.xlsx")
+            await message.answer_document(file)
 
     async def __edit_processing(self, message, record_id, user_message):
         if len(user_message) > 1:

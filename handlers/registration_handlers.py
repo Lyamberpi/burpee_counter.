@@ -13,7 +13,7 @@ class RegistrationHandler:
 
     async def start_handler(self, message: types.Message):
         user_age = self.user_transactions.get_user_age(message.from_user.id)
-        if not message.chat.type.__eq__("group") and user_age is None or (
+        if message.from_user.id == message.chat.id and user_age is None or (
                 type(user_age) is tuple and user_age[0] is None):
             from_user = message.from_user
             user = User(from_user.first_name, from_user.last_name, from_user.id)

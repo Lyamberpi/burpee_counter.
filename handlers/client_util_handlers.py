@@ -29,7 +29,8 @@ class ClientUtilsHandler:
     top_r_women = "Топ бег женщины"
 
     async def help_command_handler(self, message: types.Message):
-        await help_command_message(message)
+        if message.from_user.id == message.chat.id:
+            await help_command_message(message)
 
     async def my_statistic_handler(self, message: types.Message):
         user_id = message.from_user.id
