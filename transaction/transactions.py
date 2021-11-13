@@ -24,6 +24,9 @@ class UserTransactions:
     def get_user_gender(self, user_id) -> tuple:
         return self.users.get_gender(user_id)
 
+    def get_users_info(self):
+        return self.users.get_users_info()
+
     def ban_user(self, user_id):
         self.users.ban_user(user_id)
 

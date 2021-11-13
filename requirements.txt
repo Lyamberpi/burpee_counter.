@@ -1,2 +1,3 @@
 aiogram~=2.15
 mysql-connector-python~=8.0.26
+XlsxWriter~=3.0.2

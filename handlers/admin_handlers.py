@@ -1,8 +1,9 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InputFile
 
 import states
+import utils
 from handlers.client_util_handlers import convert_km_to_m
 from transaction import RecordTransactions, UserTransactions, ChatTransactions
 
@@ -11,6 +12,7 @@ class AdminHandlers:
     record_transactions = RecordTransactions()
     user_transactions = UserTransactions()
     chat_transactions = ChatTransactions()
+    xls_creator = utils.XlsCreator()
 
     async def set_zero_run_handler(self, message: types.Message):
         if message.from_user.id == message.chat.id:
@@ -93,7 +95,8 @@ class AdminHandlers:
             "Булава и команда)\n"
             "/add_team_result бег/run - добавить запись бега от имени администратора (Пользователь - "
             "Булава и команда)\n"
-            "/add_chat chat_id название_чата пол - Добавить чат(1=Муж, 2=Жен)")
+            "/add_chat chat_id название_чата пол - Добавить чат(1=Муж, 2=Жен)"
+            "/get_xls Получить выгрузку данных о пользователях в формате .xls")
 
     async def add_chat_handler(self, message: types.Message):
         if message.from_user.id == message.chat.id:
@@ -106,6 +109,12 @@ class AdminHandlers:
                 else:
                     self.chat_transactions.add_chat(chat_id, title)
             await message.answer("Чат добавлен успешно!")
+
+    async def get_xls_handler(self, message: types.Message):
+        users_data = self.user_transactions.get_users_info()
+        self.xls_creator.unload_user_data(users_data)
+        file = InputFile("users_data.xlsx")
+        await message.answer_document(file)
 
     async def __edit_processing(self, message, record_id, user_message):
         if len(user_message) > 1:

@@ -79,6 +79,7 @@ class Initializer:
                                                 state=states.DeleteStates.deleting)
         self.dp.register_message_handler(admin_handler.add_chat_handler, user_id=super_admin,
                                          commands=["add_chat"])
+        self.dp.register_message_handler(admin_handler.get_xls_handler, user_id=super_admin, commands=["get_xls"])
 
     def register_form_top_handlers(self, form_top_handler):
         self.dp.register_message_handler(form_top_handler.form_top_handler, user_id=super_admin, commands=["form_top"])

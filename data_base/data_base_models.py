@@ -62,6 +62,13 @@ class UserDB(AbstractDataBase):
             cursor.execute(sql, (user_id,))
             return cursor.fetchone()
 
+    def get_users_info(self):
+        sql = "SELECT user_id,first_name, second_name, city, gender, age, registr_date FROM users"
+        self.connection.reconnect(attempts=2)
+        with self.connection.cursor() as cursor:
+            cursor.execute(sql)
+            return cursor.fetchall()
+
     def ban_user(self, user_id):
         sql = "UPDATE users SET is_baned=1 WHERE user_id = %s;"
         self.connection.reconnect(attempts=2)
