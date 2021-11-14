@@ -18,7 +18,7 @@ class AdminHandlers:
         if message.from_user.id == message.chat.id:
             keyboard = InlineKeyboardMarkup()
             keyboard.add(InlineKeyboardButton("Да", callback_data="2"), InlineKeyboardButton("Нет", callback_data="0"))
-            await message.answer("Вы действительно ходите удалить все записи содержащие бёрпи?", reply_markup=keyboard)
+            await message.answer("Вы действительно ходите удалить все записи содержащие бег?", reply_markup=keyboard)
             await states.DeleteStates.deleting.set()
 
     async def set_zero_burpee_handler(self, message: types.Message):
