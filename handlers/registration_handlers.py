@@ -1,10 +1,12 @@
+from os import environ
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from states import states_set
-from models import User
 from handlers.client_util_handlers import help_command_message
+from models import User
+from states import states_set
 from transaction.transactions import UserTransactions
 
 
@@ -44,9 +46,9 @@ class RegistrationHandler:
         keyboard = InlineKeyboardMarkup(row_width=2)
         keyboard.add(InlineKeyboardButton("М", callback_data="burpeeMan"),
                      InlineKeyboardButton("Ж", callback_data="burpeeWoman"))
-        await message.answer("Выбери свой пол", reply_markup=keyboard)
+        await message.answer("Выбери свой пол 🙋‍♂️💃", reply_markup=keyboard)
 
-    async def add_gender_handler(self, callback_query: types.CallbackQuery):
+    async def add_gender_handler(self, callback_query: types.CallbackQuery, state: FSMContext):
         message = callback_query.message
         gender = None
         if callback_query.data.__eq__("burpeeMan"):
@@ -56,9 +58,15 @@ class RegistrationHandler:
         self.user_transactions.add_gender(message.chat.id, gender)
         await states_set.Registration.add_age.set()
         await message.answer("Укажи свой возраст")
+        await state.update_data({"gender": gender})
 
     async def add_age_handler(self, message: types.Message, state: FSMContext):
         await state.finish()
         self.user_transactions.add_age(message.from_user.id, int(message.text))
-        await message.answer("Регистрация завершена!")
+        await message.answer("🥳 Твоя регистрация завершена.\n"
+                             "Подписывайся на основной <a href='t.me/lyamberpi'>канал вызова</a>"
+                             " и отмечай в сторисах инстаграм аккаунт со своими пробежками / выполнением бёрпи"
+                             " 🤳📷 instagram.com/lyamberpi\n"
+                             # f"А это 👉 <a href='{link}'>чат с единомышленниками</a>"
+                             ,parse_mode="HTML")
         await help_command_message(message)
