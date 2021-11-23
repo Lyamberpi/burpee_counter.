@@ -19,7 +19,17 @@ class RegistrationHandler:
             user = User(from_user.first_name, from_user.last_name, from_user.id)
             self.user_transactions.add_user(user)
             await states_set.Registration.add_city.set()
-            await message.answer("Добро пожаловать!\nВыберете Город")
+            await message.answer("🥳 Добро пожаловать в вызов #ЛямБерпи 👊\n\n"
+                                 "🎯Наша цель - коллективно выполнить 1 000 000 бёрпи"
+                                 " и пробежать 🏃 100 000 километров до 1 декабря 2022 года.\n\n"
+                                 "Принимай активное участие, приглашай друзей,"
+                                 " становись лучшей версией себя и вдохновляй окружение.\n\n"
+                                 "💥 Море мотивации получишь внутри чатов,"
+                                 " где тебя ждут ЗОЖ единомышленники.\n\n"
+                                 "Я буду внимательно считать твои результаты"
+                                 " и за активность поощрять приятными подарками 🎁\n\n"
+                                 "🙌 А теперь давай немного познакомимся,"
+                                 " напиши из какой ты страны и города в формате: Страна/Город\n")
 
     async def add_city_handler(self, message: types.Message):
         self.user_transactions.add_city(message.from_user.id, message.text)
@@ -27,7 +37,7 @@ class RegistrationHandler:
         keyboard = InlineKeyboardMarkup(row_width=2)
         keyboard.add(InlineKeyboardButton("М", callback_data="burpeeMan"),
                      InlineKeyboardButton("Ж", callback_data="burpeeWoman"))
-        await message.answer("Выберете пол", reply_markup=keyboard)
+        await message.answer("Выбери свой пол", reply_markup=keyboard)
 
     async def add_gender_handler(self, callback_query: types.CallbackQuery):
         message = callback_query.message
@@ -38,7 +48,7 @@ class RegistrationHandler:
             gender = 2
         self.user_transactions.add_gender(message.chat.id, gender)
         await states_set.Registration.add_age.set()
-        await message.answer("Сколько Вам лет?")
+        await message.answer("Укажи свой возраст")
 
     async def add_age_handler(self, message: types.Message, state: FSMContext):
         await state.finish()

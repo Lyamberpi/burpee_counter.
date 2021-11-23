@@ -7,7 +7,11 @@ from transaction import RecordTransactions
 
 async def help_command_message(message: types.Message):
     await message.answer(
-        "Some help text\nSome help text\nSome help text\nSome help text\nSome help text\nSome help text\n")
+        "Что умеет бот?\n\n"
+        "бег/run 100 - добавить результат бёрпи (в км)\n"
+        "берпи/бёрпи/burpeee 100 - добавить результат бёрпи\n"
+        "/my_statistic - посмотреть свою статистику\n"
+        "/statistic - посмотреть общую статистику")
 
 
 def convert_km_to_m(contribution_in_km):
