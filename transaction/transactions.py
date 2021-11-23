@@ -166,4 +166,3 @@ class RecordTransactions:
             formatted_result = formatted_result + str(counter) + ". " + name + " " + str(contribution) + "\n"
             counter += 1
         return formatted_result
-
