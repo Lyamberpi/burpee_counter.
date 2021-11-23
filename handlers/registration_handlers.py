@@ -18,7 +18,8 @@ class RegistrationHandler:
             from_user = message.from_user
             user = User(from_user.first_name, from_user.last_name, from_user.id)
             self.user_transactions.add_user(user)
-            await states_set.Registration.add_city.set()
+            keyboard = InlineKeyboardMarkup()
+            keyboard.add(InlineKeyboardButton("Да!", callback_data="add_city_question"))
             await message.answer("🥳 Добро пожаловать в вызов #ЛямБерпи 👊\n\n"
                                  "🎯Наша цель - коллективно выполнить 1 000 000 бёрпи"
                                  " и пробежать 🏃 100 000 километров до 1 декабря 2022 года.\n\n"
@@ -28,8 +29,14 @@ class RegistrationHandler:
                                  " где тебя ждут ЗОЖ единомышленники.\n\n"
                                  "Я буду внимательно считать твои результаты"
                                  " и за активность поощрять приятными подарками 🎁\n\n"
-                                 "🙌 А теперь давай немного познакомимся,"
-                                 " напиши из какой ты страны и города в формате: Страна/Город\n")
+                                 "🙌 А теперь давай немного познакомимся!\n\n"
+                                 "Готов (а)?", reply_markup=keyboard)
+
+    async def add_city_question_handler(self, callback_query: types.CallbackQuery):
+        user_age = self.user_transactions.get_user_age(callback_query.from_user.id)
+        if user_age is None or (type(user_age) is tuple and user_age[0] is None):
+            await states_set.Registration.add_city.set()
+            await callback_query.message.answer("Напиши из какой ты страны и города в формате: Страна/Город")
 
     async def add_city_handler(self, message: types.Message):
         self.user_transactions.add_city(message.from_user.id, message.text)
@@ -53,5 +60,5 @@ class RegistrationHandler:
     async def add_age_handler(self, message: types.Message, state: FSMContext):
         await state.finish()
         self.user_transactions.add_age(message.from_user.id, int(message.text))
-        await message.answer("Регестрация завершена!")
+        await message.answer("Регистрация завершена!")
         await help_command_message(message)

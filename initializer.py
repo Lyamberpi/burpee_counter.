@@ -49,6 +49,8 @@ class Initializer:
 
     def register_registration_handlers(self, registration_handler):
         self.dp.register_message_handler(registration_handler.start_handler, commands=["start"])
+        self.dp.register_callback_query_handler(registration_handler.add_city_question_handler,
+                                                text="add_city_question")
         self.dp.register_message_handler(registration_handler.add_city_handler, state=states_set.Registration.add_city)
         self.dp.register_callback_query_handler(registration_handler.add_gender_handler,
                                                 state=states_set.Registration.add_gender)
