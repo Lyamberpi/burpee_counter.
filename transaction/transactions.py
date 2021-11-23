@@ -61,9 +61,9 @@ class TransactionUtils:
             return ""
 
     def prepare_result(self, unconverted_result, exercise_type_id):
-        if exercise_type_id == 1:
+        if unconverted_result and exercise_type_id == 1:
             return unconverted_result
-        elif exercise_type_id == 2:
+        elif unconverted_result and exercise_type_id == 2:
             return round(unconverted_result / 1000, 3)
 
     def prepare_top(self, exercise_type_id, unsorted_top, user_id, gender, records_db):
