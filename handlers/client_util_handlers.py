@@ -8,7 +8,7 @@ from transaction import RecordTransactions
 async def help_command_message(message: types.Message):
     await message.answer(
         "Что умеет бот?\n\n"
-        "бег/run 100 - добавить результат бёрпи (в км)\n"
+        "бег/run 100 - добавить результат бега (в км)\n"
         "берпи/бёрпи/burpeee 100 - добавить результат бёрпи\n"
         "/my_statistic - посмотреть свою статистику\n"
         "/statistic - посмотреть общую статистику")

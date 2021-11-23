@@ -18,7 +18,7 @@ class XlsCreator:
         header_format.set_bold()
         header_format.set_border()
         worksheet.freeze_panes(1, 0)
-        worksheet.write_row(0, 0, ["User_id", "Имя", "Фамилия", "Город", "Пол", "Возраст", "Дата_регестрации"],
+        worksheet.write_row(0, 0, ["User_id", "Имя", "Фамилия", "Город", "Пол", "Возраст", "Дата_регистрации"],
                             header_format)
         if data_list:
             lines_format = workbook.add_format()
