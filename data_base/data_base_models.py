@@ -63,7 +63,7 @@ class UserDB(AbstractDataBase):
             return cursor.fetchone()
 
     def get_users_info(self):
-        sql = "SELECT user_id,first_name, second_name, city, gender, age, registr_date FROM users"
+        sql = "SELECT user_id,first_name, second_name, city, gender, age, registr_date FROM users ORDER BY registr_date"
         self.connection.reconnect(attempts=2)
         with self.connection.cursor() as cursor:
             cursor.execute(sql)
