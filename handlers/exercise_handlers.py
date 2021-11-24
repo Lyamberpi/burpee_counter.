@@ -42,7 +42,7 @@ class ExerciseHandler:
         if message.from_user.id == message.chat.id:
             args = message.get_args().split()
             if len(args) == 2:
-                if args[0].lower() in ["берпи", "бёрпи", "burpee"]:
+                if args[0].lower() in ["берпи", "бёрпи", "burpee", "бëрпи"]:
                     ex_type_id = 1
                     contribution = int(args[1])
                 elif args[0].lower() in ["бег", "run"]:

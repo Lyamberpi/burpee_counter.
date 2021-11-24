@@ -42,7 +42,8 @@ class Initializer:
         self.dp.register_message_handler(exercise_handler.add_run_handler,
                                          filters.Text(startswith=["Бег", "Run"], ignore_case=True))
         self.dp.register_message_handler(exercise_handler.add_burpee_handler,
-                                         filters.Text(startswith=["Берпи", "Бёрпи", "Burpee"], ignore_case=True))
+                                         filters.Text(startswith=["Берпи", "Бёрпи", "Бëрпи", "Burpee"],
+                                                      ignore_case=True))
         self.dp.register_message_handler(exercise_handler.add_team_result_handler,
                                          user_id=[super_admin, admin1, admin2],
                                          commands=["add_team_result"])
