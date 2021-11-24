@@ -12,6 +12,10 @@ from transaction.transactions import UserTransactions
 
 class RegistrationHandler:
     user_transactions = UserTransactions()
+    men_chat_link = environ["MEN_CHAT"]
+    women_chat_link = environ["WOMEN_CHAT"]
+    main_channel = environ["MAIN_CHANNEL"]
+    instagram = environ["INSTAGRAM"]
 
     async def start_handler(self, message: types.Message):
         user_age = self.user_transactions.get_user_age(message.from_user.id)
@@ -61,12 +65,17 @@ class RegistrationHandler:
         await state.update_data({"gender": gender})
 
     async def add_age_handler(self, message: types.Message, state: FSMContext):
+        user_data: dict = await state.get_data()
+        gender = user_data.get("gender")
+        if gender == 2:
+            link = self.women_chat_link
+        else:
+            link = self.men_chat_link
         await state.finish()
         self.user_transactions.add_age(message.from_user.id, int(message.text))
         await message.answer("🥳 Твоя регистрация завершена.\n"
-                             "Подписывайся на основной <a href='t.me/lyamberpi'>канал вызова</a>"
+                             f"Подписывайся на основной <a href='{self.main_channel}'>канал вызова</a>"
                              " и отмечай в сторисах инстаграм аккаунт со своими пробежками / выполнением бёрпи"
-                             " 🤳📷 instagram.com/lyamberpi\n"
-                             # f"А это 👉 <a href='{link}'>чат с единомышленниками</a>"
-                             ,parse_mode="HTML")
+                             f" 🤳📷 {self.instagram}\n"
+                             f"А это 👉 <a href='{link}'>чат с единомышленниками</a>", parse_mode="HTML")
         await help_command_message(message)
