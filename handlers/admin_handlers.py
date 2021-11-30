@@ -69,8 +69,7 @@ class AdminHandlers:
             message_text = "Вы находитесь в режиме редактирования\n" \
                            "<b>Для удаления записи</b> введите её номер\n" \
                            "<b>Для редактирования:</b> номер и новое значение\n" \
-                           "<b>Для выхода</b> используйте команду /stop_edit\n\n" + self.__prepare_message(record_list,
-                                                                                                           user_id)
+                           "<b>Для выхода</b> используйте команду /stop_edit\n\n" + self.__prepare_message(record_list)
             await states.AdminStates.editing_records.set()
             await message.answer(message_text, parse_mode="HTML")
 
@@ -149,9 +148,9 @@ class AdminHandlers:
         await message.delete()
         await message.answer(text, parse_mode="HTML")
 
-    def __prepare_message(self, record_list, user_id):
+    def __prepare_message(self, record_list):
         message_text = ""
-        for record_id, first_name, second_name, exercise_type_id, contribution, gender in record_list:
+        for record_id, first_name, second_name, exercise_type_id, contribution, gender, user_id in record_list:
             name = first_name
             if second_name:
                 name += " " + second_name

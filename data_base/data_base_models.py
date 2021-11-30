@@ -185,7 +185,7 @@ class RecordDB(AbstractDataBase):
 
     def show_user_records(self, user_id, row_limit):
         sql = " SELECT record_id, u.first_name, u.second_name, r.exercise_type_id ," \
-              " r.contribution, gender " \
+              " r.contribution, gender, u.user_id " \
               "FROM records r ,users u " \
               "WHERE r.user_id = u.user_id " \
               "AND r.user_id = %s " \
@@ -198,7 +198,7 @@ class RecordDB(AbstractDataBase):
 
     def show_all_records(self, row_limit):
         sql = " SELECT record_id, u.first_name, u.second_name, r.exercise_type_id ," \
-              " r.contribution, gender " \
+              " r.contribution, gender, u.user_id " \
               "FROM records r ,users u " \
               "WHERE r.user_id = u.user_id " \
               "ORDER BY `date` DESC " \
