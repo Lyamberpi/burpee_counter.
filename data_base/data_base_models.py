@@ -1,13 +1,12 @@
 import mysql.connector
 
+DB_HOST = environ["DB_HOST"]
+DB_PORT = environ["DB_PORT"]
+DB_USER = environ["DB_USER"]
+DB_PASSWORD = environ["DB_PASS"]
+DB_NAME = environ["DB_NAME"]
 
 class AbstractDataBase:
-    DB_HOST = environ["DB_HOST"]
-    DB_PORT = environ["DB_PORT"]
-    DB_USER = environ["DB_USER"]
-    DB_PASSWORD = environ["DB_PASS"]
-    DB_NAME = environ["DB_NAME"]
-
     connection = mysql.connector.connect(host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASSWORD,
                                          database=DB_NAME)
 
