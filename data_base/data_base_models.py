@@ -2,9 +2,14 @@ import mysql.connector
 
 
 class AbstractDataBase:
-    connection = mysql.connector.connect(host="database-test.cwcm4dxhnyoi.us-east-2.rds.amazonaws.com", port="3306",
-                                         user="admin",
-                                         password="nick12nick", database="burpee_bot")
+    DB_HOST = environ["DB_HOST"]
+    DB_PORT = environ["DB_PORT"]
+    DB_USER = environ["DB_USER"]
+    DB_PASSWORD = environ["DB_PASS"]
+    DB_NAME = environ["DB_NAME"]
+
+    connection = mysql.connector.connect(host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASSWORD,
+                                         database=DB_NAME)
 
 
 class UserDB(AbstractDataBase):
