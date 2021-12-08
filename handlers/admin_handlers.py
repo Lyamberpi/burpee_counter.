@@ -98,7 +98,8 @@ class AdminHandlers:
                 "/add_team_result бег/run - добавить запись бега от имени администратора (Пользователь - "
                 "Булава и команда)\n"
                 "/add_chat chat_id название_чата пол - Добавить чат(1=Муж, 2=Жен)\n"
-                "/get_xls Получить выгрузку данных о пользователях в формате .xls")
+                "/get_xls Получить выгрузку данных о пользователях в формате .xls\n"
+                "/form_top Сформировать топ (По полу, упражнению и дате) и отправить в чаты")
 
     async def add_chat_handler(self, message: types.Message):
         if message.from_user.id == message.chat.id:
