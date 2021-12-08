@@ -50,7 +50,7 @@ class ExerciseHandler:
                     contribution = convert_km_to_m(args[1])
                 else:
                     return
-            self.record_transactions.create_record(contribution, ex_type_id, "115599", None)
+            self.record_transactions.create_record(contribution, ex_type_id, "39713971", None)
             await message.answer("Запись успешно добавлена")
 
     async def __add_run_result(self, message, user, contribution_in_km):
