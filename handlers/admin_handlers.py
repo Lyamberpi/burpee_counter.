@@ -8,6 +8,23 @@ from handlers.client_util_handlers import convert_km_to_m
 from transaction import RecordTransactions, UserTransactions, ChatTransactions
 
 
+async def help_admin_command_message(message: types.Message):
+    await message.answer(
+        "/set_zero_run - обнулить счетчик бега\n"
+        "/set_zero_burpee - обнулить счетчик бёрпи\n"
+        "/ban user_id - забанить пользователя по его id\n"
+        "/unban user_id - разбанить пользователя по его id\n"
+        "/show_records user_id максимальное_количество_записей - показать записи пользователя по его id\n"
+        "/show_records all максимальное_количество_записей - показать записи всех пользователей\n"
+        "/add_team_result берпи/бёрпи/burpee - добавить запись бёрпи от имени администратора (Пользователь - "
+        "Булава и команда)\n"
+        "/add_team_result бег/run - добавить запись бега от имени администратора (Пользователь - "
+        "Булава и команда)\n"
+        "/add_chat chat_id название_чата пол - Добавить чат(1=Муж, 2=Жен)\n"
+        "/get_xls Получить выгрузку данных о пользователях в формате .xls\n"
+        "/form_top Сформировать топ (По полу, упражнению и дате) и отправить в чаты")
+
+
 class AdminHandlers:
     record_transactions = RecordTransactions()
     user_transactions = UserTransactions()
@@ -86,20 +103,7 @@ class AdminHandlers:
 
     async def help_admin_handler(self, message: types.Message):
         if message.from_user.id == message.chat.id:
-            await message.answer(
-                "/set_zero_run - обнулить счетчик бега\n"
-                "/set_zero_burpee - обнулить счетчик бёрпи\n"
-                "/ban user_id - забанить пользователя по его id\n"
-                "/unban user_id - разбанить пользователя по его id\n"
-                "/show_records user_id максимальное_количество_записей - показать записи пользователя по его id\n"
-                "/show_records all максимальное_количество_записей - показать записи всех пользователей\n"
-                "/add_team_result берпи/бёрпи/burpee - добавить запись бёрпи от имени администратора (Пользователь - "
-                "Булава и команда)\n"
-                "/add_team_result бег/run - добавить запись бега от имени администратора (Пользователь - "
-                "Булава и команда)\n"
-                "/add_chat chat_id название_чата пол - Добавить чат(1=Муж, 2=Жен)\n"
-                "/get_xls Получить выгрузку данных о пользователях в формате .xls\n"
-                "/form_top Сформировать топ (По полу, упражнению и дате) и отправить в чаты")
+            await help_admin_command_message(message)
 
     async def add_chat_handler(self, message: types.Message):
         if message.from_user.id == message.chat.id:
