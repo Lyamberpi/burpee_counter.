@@ -36,7 +36,7 @@ class ClientUtilsHandler:
     async def help_command_handler(self, message: types.Message):
         if message.from_user.id == message.chat.id:
             await help_command_message(message)
-        if message.from_user.id in [initializer.super_admin, initializer.admin1, initializer.admin2]:
+        if str(message.from_user.id) in [initializer.super_admin, initializer.admin1, initializer.admin2]:
             await admin_handlers.help_admin_command_message(message)
 
     async def my_statistic_handler(self, message: types.Message):
