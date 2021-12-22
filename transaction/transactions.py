@@ -47,9 +47,15 @@ class ChatTransactions:
 class TransactionUtils:
     def prepare_user_not_in_top(self, exercise_type_id, gender, user_id, records_db):
         line = "-" * 20 + "\n"
-        user_result = records_db.get_user_with_placement(exercise_type_id, gender, user_id)
+        user_result = records_db.get_top_no_limit(exercise_type_id, gender)
+        user_result = sorted(user_result, key=lambda result_line: result_line[3], reverse=True)
+        try:
+            row_number = [user_result_line[0] for user_result_line in user_result].index(user_id)
+        except ValueError:
+            return ""
+        user_result = user_result[row_number]
         if user_result:
-            placement = user_result[0]
+            placement = row_number+1
             contribution = self.prepare_result(user_result[3], exercise_type_id)
             if user_result[2]:
                 name = user_result[1] + " " + user_result[2]

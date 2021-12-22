@@ -141,18 +141,18 @@ class RecordDB(AbstractDataBase):
             cursor.execute(sql, (exercise_type_id, gender))
             return cursor.fetchall()
 
-    def get_user_with_placement(self, exercise_type_id, gender, user_id) -> list:
-        sql = "SELECT  r_num,fn,sn,c FROM(SELECT r.user_id as id," \
-              "u.first_name as fn, u.second_name as sn,SUM(contribution) AS c, " \
-              "row_number() over(ORDER BY SUM(contribution) DESC) as r_num " \
-              "FROM records r, users u WHERE exercise_type_id = %s " \
-              "AND r.user_id = u.user_id AND u.gender = %s " \
-              "GROUP BY id ORDER BY c DESC) b " \
-              "WHERE id = %s"
+    def get_top_no_limit(self, exercise_type_id, gender):
+        sql = "SELECT r.user_id,u.first_name, u.second_name," \
+              " SUM(contribution) AS c FROM records r, users u " \
+              "WHERE exercise_type_id = %s " \
+              "AND r.user_id = u.user_id " \
+              "AND u.gender = %s " \
+              "GROUP BY user_id " \
+              "ORDER BY c DESC"
         self.connection.reconnect(attempts=2)
         with self.connection.cursor() as cursor:
-            cursor.execute(sql, (exercise_type_id, gender, user_id))
-            return cursor.fetchone()
+            cursor.execute(sql, (exercise_type_id, gender))
+            return cursor.fetchall()
 
     def delete_records_by_ex_type(self, exercise_type_id):
         sql = "DELETE FROM records WHERE exercise_type_id = %s"
