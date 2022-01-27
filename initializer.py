@@ -90,6 +90,8 @@ class Initializer:
                                          commands=["add_chat"])
         self.dp.register_message_handler(admin_handler.get_xls_handler, user_id=[super_admin, admin1, admin2],
                                          commands=["get_xls"])
+        self.dp.register_message_handler(admin_handler.get_user_by_id, user_id=[super_admin, admin1, admin2],
+                                         commands=["id"])
 
     def register_form_top_handlers(self, form_top_handler):
         self.dp.register_message_handler(form_top_handler.form_top_handler, user_id=[super_admin, admin1, admin2],

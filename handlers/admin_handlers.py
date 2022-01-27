@@ -22,7 +22,8 @@ async def help_admin_command_message(message: types.Message):
         "Булава и команда)\n"
         "/add_chat chat_id название_чата пол - Добавить чат(1=Муж, 2=Жен)\n"
         "/get_xls Получить выгрузку данных о пользователях в формате .xls\n"
-        "/form_top Сформировать топ (По полу, упражнению и дате) и отправить в чаты")
+        "/form_top Сформировать топ (По полу, упражнению и дате) и отправить в чаты"
+        "/id user_id - Получить ссылку на человека по id")
 
 
 class AdminHandlers:
@@ -64,7 +65,8 @@ class AdminHandlers:
             if id_to_ban != message.from_user.id:
                 self.user_transactions.ban_user(id_to_ban)
                 await message.delete()
-                await message.answer("[Пользователь](tg://user?id=" + str(id_to_ban) + ") забанен", parse_mode="Markdown")
+                await message.answer("[Пользователь](tg://user?id=" + str(id_to_ban) + ") забанен",
+                                     parse_mode="Markdown")
 
     async def unban_user(self, message: types.Message):
         if message.from_user.id == message.chat.id:
@@ -95,6 +97,12 @@ class AdminHandlers:
             user_message = message.text.split()
             record_id = user_message[0]
             await self.__edit_processing(message, record_id, user_message)
+
+    async def get_user_by_id(self, message: types.Message):
+        if message.from_user.id == message.chat.id:
+            user_id = int(message.get_args())
+            await message.answer(f"[Ссылка](tg://user?id={str(user_id)})",
+                                 parse_mode="Markdown")
 
     async def stop_edit_handler(self, message: types.Message, state: FSMContext):
         await state.finish()
