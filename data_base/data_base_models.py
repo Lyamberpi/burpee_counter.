@@ -108,7 +108,8 @@ class ChatDB(AbstractDataBase):
 
 class RecordDB(AbstractDataBase):
     def create_record(self, contribution, exercise_type_id, user_id, chat_id):
-        sql = "INSERT INTO records (contribution, exercise_type_id, user_id, chat_id) VALUES (%s, %s, %s, %s)"
+        sql = "INSERT INTO records (contribution, exercise_type_id, user_id, chat_id, date)" \
+              " VALUES (%s, %s, %s, %s, NOW())"
         self.connection.reconnect(attempts=2)
         with self.connection.cursor() as cursor:
             cursor.execute(sql, (contribution, exercise_type_id, user_id, chat_id))
