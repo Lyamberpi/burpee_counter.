@@ -136,7 +136,7 @@ class RecordDB(AbstractDataBase):
               "AND r.user_id = u.user_id " \
               "AND u.gender = %s " \
               "GROUP BY user_id " \
-              "ORDER BY c DESC LIMIT 10"
+              "ORDER BY c DESC LIMIT 20"
         self.connection.reconnect(attempts=2)
         with self.connection.cursor() as cursor:
             cursor.execute(sql, (exercise_type_id, gender))
