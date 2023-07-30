@@ -13,8 +13,8 @@ from handlers.form_top_handlers import FormTopHandlers
 from handlers.registration_handlers import RegistrationHandler
 from states import states_set
 
-run_goal = environ["RUN_GOAL"]
-burpee_goal = environ["BURPEE_GOAL"]
+squats_goal = environ["SQUATS_GOAL"]
+push_ups_goal = environ["PUSH_UPS_GOAL"]
 super_admin = environ["SUPER_ADMIN"]
 admin1 = environ["ADMIN1"]
 admin2 = environ["ADMIN2"]
@@ -39,10 +39,10 @@ class Initializer:
         self.register_edit_top_handlers(edit_top_handler)
 
     def register_exercise_handlers(self, exercise_handler):
-        self.dp.register_message_handler(exercise_handler.add_run_handler,
-                                         filters.Text(startswith=["Бег", "Run"], ignore_case=True))
-        self.dp.register_message_handler(exercise_handler.add_burpee_handler,
-                                         filters.Text(startswith=["Берпи", "Бёрпи", "Бëрпи", "Burpee"],
+        self.dp.register_message_handler(exercise_handler.add_squats_handler,
+                                         filters.Text(startswith=["Приседания", "Squats"], ignore_case=True))
+        self.dp.register_message_handler(exercise_handler.add_push_ups_handler,
+                                         filters.Text(startswith=["Отжимания", "Push-ups"],
                                                       ignore_case=True))
         self.dp.register_message_handler(exercise_handler.add_team_result_handler,
                                          user_id=[super_admin, admin1, admin2],
@@ -61,16 +61,16 @@ class Initializer:
         self.dp.register_message_handler(client_utils_handler.help_command_handler, commands=["help"])
         self.dp.register_message_handler(client_utils_handler.my_statistic_handler, commands=["my_statistic"])
         self.dp.register_message_handler(client_utils_handler.statistic_handler, commands=["statistic"])
-        self.dp.register_callback_query_handler(client_utils_handler.burpee_men, text="top_b_men")
-        self.dp.register_callback_query_handler(client_utils_handler.burpee_women, text="top_b_women")
-        self.dp.register_callback_query_handler(client_utils_handler.run_men, text="top_r_men")
-        self.dp.register_callback_query_handler(client_utils_handler.run_women, text="top_r_women")
+        self.dp.register_callback_query_handler(client_utils_handler.push_ups_men, text="top_p_men")
+        self.dp.register_callback_query_handler(client_utils_handler.push_ups_women, text="top_p_women")
+        self.dp.register_callback_query_handler(client_utils_handler.squats_men, text="top_s_men")
+        self.dp.register_callback_query_handler(client_utils_handler.squats_women, text="top_s_women")
 
     def register_admin_handlers(self, admin_handler):
-        self.dp.register_message_handler(admin_handler.set_zero_run_handler, user_id=[super_admin, admin1, admin2],
-                                         commands=["set_zero_run"])
-        self.dp.register_message_handler(admin_handler.set_zero_burpee_handler, user_id=[super_admin, admin1, admin2],
-                                         commands=["set_zero_burpee"])
+        self.dp.register_message_handler(admin_handler.set_zero_squats_handler, user_id=[super_admin, admin1, admin2],
+                                         commands=["set_zero_squats"])
+        self.dp.register_message_handler(admin_handler.set_zero_push_ups_handler, user_id=[super_admin, admin1, admin2],
+                                         commands=["set_zero_push_ups"])
         self.dp.register_message_handler(admin_handler.ban_user, user_id=[super_admin, admin1, admin2],
                                          commands=["ban"])
         self.dp.register_message_handler(admin_handler.unban_user, user_id=[super_admin, admin1, admin2],

@@ -55,7 +55,7 @@ class TransactionUtils:
             return ""
         user_result = user_result[row_number]
         if user_result:
-            placement = row_number+1
+            placement = row_number + 1
             contribution = self.prepare_result(user_result[3], exercise_type_id)
             if user_result[2]:
                 name = user_result[1] + " " + user_result[2]
@@ -86,10 +86,10 @@ class TransactionUtils:
                 name = tuple_line[1]
             if user_id == top_user_id:
                 user_in_top = True
-                line = self.prepare_line_for_top(contribution, counter, exercise_type_id, name)
+                line = self.prepare_line_for_top(contribution, counter, name)
                 counter += 1
             else:
-                line = self.prepare_line_for_top(contribution, counter, exercise_type_id, name, False)
+                line = self.prepare_line_for_top(contribution, counter, name, False)
                 counter += 1
             text_result = text_result + line
         user_gender = user_tr.get_user_gender(user_id)
@@ -100,12 +100,8 @@ class TransactionUtils:
         else:
             return text_result + self.prepare_user_not_in_top(exercise_type_id, gender, user_id, records_db)
 
-    def prepare_line_for_top(self, contribution, counter, exercise_type_id, name, with_user=True):
-        line = str(counter) + ". " + name + " " + str(contribution)
-        if exercise_type_id == 2:
-            line = line + "км\n"
-        else:
-            line = line + "\n"
+    def prepare_line_for_top(self, contribution, counter, name, with_user=True):
+        line = str(counter) + ". " + name + " " + str(contribution) + "\n"
         if with_user:
             return "<b><i>" + line + "</i></b>"
         else:
@@ -162,8 +158,6 @@ class RecordTransactions:
         for tuple_line in records_list:
             user_id = tuple_line[0]
             contribution = self.utils.prepare_result(tuple_line[3], exercise_type_id)
-            if exercise_type_id == 2:
-                contribution = str(contribution) + " км."
             if tuple_line[2]:
                 name = tuple_line[1] + " " + tuple_line[2]
             else:

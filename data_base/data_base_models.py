@@ -89,7 +89,7 @@ class UserDB(AbstractDataBase):
 class ChatDB(AbstractDataBase):
     def add_chat(self, chat_id, title, gender):
         sql1 = "INSERT INTO chats(chat_id, title, gender) VALUES (%s, %s, %s)"
-        sql2 = "UPDATE burpee_bot.chats SET title=%s, gender=%s  WHERE chat_id =%s;"
+        sql2 = "UPDATE push_ups_bot.chats SET title=%s, gender=%s  WHERE chat_id =%s;"
         self.connection.reconnect(attempts=2)
         with self.connection.cursor() as cursor:
             try:

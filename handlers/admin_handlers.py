@@ -4,21 +4,20 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InputFile
 
 import states
 import utils
-from handlers.client_util_handlers import convert_km_to_m
 from transaction import RecordTransactions, UserTransactions, ChatTransactions
 
 
 async def help_admin_command_message(message: types.Message):
     await message.answer(
-        "/set_zero_run - обнулить счетчик бега\n"
-        "/set_zero_burpee - обнулить счетчик бёрпи\n"
+        "/set_zero_squats - обнулить счетчик приседания\n"
+        "/set_zero_push_ups - обнулить счетчик отжиманий\n"
         "/ban user_id - забанить пользователя по его id\n"
         "/unban user_id - разбанить пользователя по его id\n"
         "/show_records user_id максимальное_количество_записей - показать записи пользователя по его id\n"
         "/show_records all максимальное_количество_записей - показать записи всех пользователей\n"
-        "/add_team_result берпи/бёрпи/burpee - добавить запись бёрпи от имени администратора (Пользователь - "
+        "/add_team_result отжимания/push_ups - добавить запись отжиманий от имени администратора (Пользователь - "
         "Булава и команда)\n"
-        "/add_team_result бег/run - добавить запись бега от имени администратора (Пользователь - "
+        "/add_team_result приседания/squats - добавить запись приседаний от имени администратора (Пользователь - "
         "Булава и команда)\n"
         "/add_chat chat_id название_чата пол - Добавить чат(1=Муж, 2=Жен)\n"
         "/get_xls Получить выгрузку данных о пользователях в формате .xls\n"
@@ -32,18 +31,20 @@ class AdminHandlers:
     chat_transactions = ChatTransactions()
     xls_creator = utils.XlsCreator()
 
-    async def set_zero_run_handler(self, message: types.Message):
+    async def set_zero_squats_handler(self, message: types.Message):
         if message.from_user.id == message.chat.id:
             keyboard = InlineKeyboardMarkup()
             keyboard.add(InlineKeyboardButton("Да", callback_data="2"), InlineKeyboardButton("Нет", callback_data="0"))
-            await message.answer("Вы действительно ходите удалить все записи содержащие бег?", reply_markup=keyboard)
+            await message.answer("Вы действительно ходите удалить все записи содержащие приседания?",
+                                 reply_markup=keyboard)
             await states.DeleteStates.deleting.set()
 
-    async def set_zero_burpee_handler(self, message: types.Message):
+    async def set_zero_push_ups_handler(self, message: types.Message):
         if message.from_user.id == message.chat.id:
             keyboard = InlineKeyboardMarkup()
             keyboard.add(InlineKeyboardButton("Да", callback_data="1"), InlineKeyboardButton("Нет", callback_data="0"))
-            await message.answer("Вы действительно ходите удалить все записи содержащие бёрпи?", reply_markup=keyboard)
+            await message.answer("Вы действительно ходите удалить все записи содержащие отжимания?",
+                                 reply_markup=keyboard)
             await states.DeleteStates.deleting.set()
 
     async def delete_records_handler(self, callback: types.CallbackQuery, state: FSMContext):
@@ -140,10 +141,7 @@ class AdminHandlers:
                 await self.__delete_and_answer(message, "Запись " + str(
                     record_id) + " <b>не существует.</b> Проверьте правильность введённых данных")
                 return
-            elif exec_type == 1:
-                new_value = value
-            else:
-                new_value = convert_km_to_m(value)
+            new_value = value
             if self.record_transactions.update_record(record_id, new_value):
                 await self.__delete_and_answer(message, "Запись " + str(
                     record_id) + " успешно обновлена, новое значение: " + str(value))
@@ -167,19 +165,14 @@ class AdminHandlers:
             name = first_name
             if second_name:
                 name += " " + second_name
-            if exercise_type_id == 1:
-                if gender == 2:
-                    action = " сделала "
-                else:
-                    action = " сделал "
-                units = " берпи"
+            if gender == 2:
+                action = " сделала "
             else:
-                contribution = round(contribution / 1000, 3)
-                if gender == 2:
-                    action = " пробежала "
-                else:
-                    action = " пробежал "
-                units = " км"
+                action = " сделал "
+            if exercise_type_id == 1:
+                units = " отжиманий"
+            else:
+                units = " приседаний"
             href = '<a href="tg://user?id=' + str(user_id) + '">' + name + '</a>'
             line = str(record_id) + ". " + href + action + str(contribution) + units
             message_text += line + "\n"

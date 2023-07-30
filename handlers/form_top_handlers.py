@@ -26,23 +26,23 @@ class FormTopHandlers:
         await states.FormTopStates.set_ex_type.set()
         await state.update_data({"gender": 1})
         keyboard = InlineKeyboardMarkup()
-        keyboard.add(InlineKeyboardButton("Бёрпи", callback_data="add_top_ex_burpee"),
-                     InlineKeyboardButton("Бег", callback_data="add_top_ex_run"))
+        keyboard.add(InlineKeyboardButton("Отжимания", callback_data="add_top_ex_push_ups"),
+                     InlineKeyboardButton("Приседания", callback_data="add_top_ex_squats"))
         await callback.message.edit_text("Выберете упражнение", reply_markup=keyboard)
 
     async def add_exercise_top_for_female_handler(self, callback: types.CallbackQuery, state: FSMContext):
         await states.FormTopStates.set_ex_type.set()
         await state.update_data({"gender": 2})
         keyboard = InlineKeyboardMarkup()
-        keyboard.add(InlineKeyboardButton("Бёрпи", callback_data="add_top_ex_burpee"),
-                     InlineKeyboardButton("Бег", callback_data="add_top_ex_run"))
+        keyboard.add(InlineKeyboardButton("Отжимания", callback_data="add_top_ex_push_ups"),
+                     InlineKeyboardButton("Приседания", callback_data="add_top_ex_squats"))
         await callback.message.edit_text("Выберете упражнение", reply_markup=keyboard)
 
     async def add_from_date_handler(self, callback: types.CallbackQuery, state: FSMContext):
         await states.FormTopStates.set_date_from.set()
         await callback.message.delete_reply_markup()
         await state.update_data({"origin_msg_id": callback.message.message_id})
-        if callback.data == "add_top_ex_burpee":
+        if callback.data == "add_top_ex_push_ups":
             ex_type = 1
         else:
             ex_type = 2

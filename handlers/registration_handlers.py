@@ -27,8 +27,8 @@ class RegistrationHandler:
             keyboard = InlineKeyboardMarkup()
             keyboard.add(InlineKeyboardButton("Да!", callback_data="add_city_question"))
             await message.answer("🥳 Добро пожаловать в вызов #ЛямБерпи 👊\n\n"
-                                 "🎯Наша цель - коллективно выполнить 1 000 000 бёрпи"
-                                 " и пробежать 🏃 100 000 километров до 1 декабря 2022 года.\n\n"
+                                 "🎯Наша цель - коллективно выполнить 1 000 000 отжиманий"
+                                 " и сделать 🦿 100 000 приседаний до 1 декабря 2022 года.\n\n"
                                  "Принимай активное участие, приглашай друзей,"
                                  " становись лучшей версией себя и вдохновляй окружение.\n\n"
                                  "💥 Море мотивации получишь внутри чатов,"
@@ -48,16 +48,16 @@ class RegistrationHandler:
         self.user_transactions.add_city(message.from_user.id, message.text)
         await states_set.Registration.add_gender.set()
         keyboard = InlineKeyboardMarkup(row_width=2)
-        keyboard.add(InlineKeyboardButton("М", callback_data="burpeeMan"),
-                     InlineKeyboardButton("Ж", callback_data="burpeeWoman"))
+        keyboard.add(InlineKeyboardButton("М", callback_data="push_upsMan"),
+                     InlineKeyboardButton("Ж", callback_data="push_upsWoman"))
         await message.answer("Выбери свой пол 🙋‍♂️💃", reply_markup=keyboard)
 
     async def add_gender_handler(self, callback_query: types.CallbackQuery, state: FSMContext):
         message = callback_query.message
         gender = None
-        if callback_query.data.__eq__("burpeeMan"):
+        if callback_query.data.__eq__("push_upsMan"):
             gender = 1
-        elif callback_query.data.__eq__("burpeeWoman"):
+        elif callback_query.data.__eq__("push_upsWoman"):
             gender = 2
         self.user_transactions.add_gender(message.chat.id, gender)
         await states_set.Registration.add_age.set()
@@ -76,7 +76,7 @@ class RegistrationHandler:
         await message.answer("🥳 Твоя регистрация завершена.\n\n"
                              f"Подписывайся на основной канал вызова {self.main_channel}\n\n"
                              "👉Вступай в чат с единомышленниками, вдохновляй и вдохновляйся примером.\n"
-                             "Присылай туда ролики с выполнением берпи и скрины пробежек.\n\n"
+                             "Присылай туда ролики с выполнением отжиманий и приседаний.\n\n"
                              "👇👇👇👇👇\n"
                              f"{link}\n\n"
                              "📢 По вопросам и предложениям обращайся к администратору  @bulavasergey\n\n"
