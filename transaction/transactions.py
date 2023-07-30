@@ -56,7 +56,7 @@ class TransactionUtils:
         user_result = user_result[row_number]
         if user_result:
             placement = row_number + 1
-            contribution = self.prepare_result(user_result[3], exercise_type_id)
+            contribution = self.prepare_result(user_result[3])
             if user_result[2]:
                 name = user_result[1] + " " + user_result[2]
             else:
@@ -66,11 +66,9 @@ class TransactionUtils:
         else:
             return ""
 
-    def prepare_result(self, unconverted_result, exercise_type_id):
-        if unconverted_result and exercise_type_id == 1:
+    def prepare_result(self, unconverted_result):
+        if unconverted_result:
             return unconverted_result
-        elif unconverted_result and exercise_type_id == 2:
-            return round(unconverted_result / 1000, 3)
 
     def prepare_top(self, exercise_type_id, unsorted_top, user_id, gender, records_db):
         user_tr = UserTransactions()
@@ -79,7 +77,7 @@ class TransactionUtils:
         counter = 1
         for tuple_line in unsorted_top:
             top_user_id = tuple_line[0]
-            contribution = self.prepare_result(tuple_line[3], exercise_type_id)
+            contribution = self.prepare_result(tuple_line[3])
             if tuple_line[2]:
                 name = tuple_line[1] + " " + tuple_line[2]
             else:
@@ -117,11 +115,11 @@ class RecordTransactions:
 
     def get_common_user_result(self, user_id, exercise_type_id):
         unconverted_result = self.records.get_common_user_result(user_id, exercise_type_id)
-        return self.utils.prepare_result(unconverted_result[0][0], exercise_type_id)
+        return self.utils.prepare_result(unconverted_result[0][0])
 
     def get_common_result(self, exercise_type_id):
         unconverted_result = self.records.get_common_result(exercise_type_id)
-        return self.utils.prepare_result(unconverted_result[0][0], exercise_type_id)
+        return self.utils.prepare_result(unconverted_result[0][0])
 
     def get_top(self, user_id, exercise_type_id, gender):
         unsorted_top = self.records.get_top(exercise_type_id, gender)
@@ -157,7 +155,7 @@ class RecordTransactions:
         counter = 1
         for tuple_line in records_list:
             user_id = tuple_line[0]
-            contribution = self.utils.prepare_result(tuple_line[3], exercise_type_id)
+            contribution = self.utils.prepare_result(tuple_line[3])
             if tuple_line[2]:
                 name = tuple_line[1] + " " + tuple_line[2]
             else:
